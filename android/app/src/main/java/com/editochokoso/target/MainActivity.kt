@@ -1,4 +1,4 @@
-package com.target
+package com.editochokoso.target
 
 import android.os.Build
 import android.os.Bundle
