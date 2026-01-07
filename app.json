@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "target",
+    "name": "Target",
     "slug": "target",
     "scheme": "target",
     "version": "1.0.0",
@@ -16,12 +16,12 @@
       "bundleIdentifier": "com.editochokoso.target",
       "icon": "./assets/ios-icon.png"
     },
-    "plugins": [
-      "expo-router",
-      "expo-font",
-      "expo-sqlite",
-      "expo-asset"
-    ],
+    "splash": {
+      "image": "./assets/ios-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "plugins": ["expo-router", "expo-font", "expo-sqlite", "expo-asset"],
     "extra": {
       "router": {},
       "eas": {
