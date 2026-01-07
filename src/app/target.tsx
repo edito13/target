@@ -140,7 +140,7 @@ const Target: React.FC<TargetProps> = () => {
         />
         <CurrencyInput
           value={amount}
-          label="Valor alvo (KZ)"
+          label="Valor alvo (R$)"
           onChangeValue={setAmount}
         />
         <Button

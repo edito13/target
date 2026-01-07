@@ -66,7 +66,7 @@ const Transaction: React.FC<TransactionProps> = () => {
         <TransactionType selected={type} onChange={setType} />
         <CurrencyInput
           value={amount}
-          label="Valor (KZ)"
+          label="Valor (R$)"
           onChangeValue={setAmount}
         />
         <Input

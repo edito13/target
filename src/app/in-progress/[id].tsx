@@ -25,8 +25,8 @@ const InProgress: React.FC<InProgressProps> = () => {
   const [transactions, setTransations] = useState<TransactionI[]>([]);
   const [details, setDetails] = useState({
     name: "",
-    current: "KZ 0,00",
-    target: "KZ 0,00",
+    current: "R$ 0,00",
+    target: "R$ 0,00",
     percentage: 0,
   });
 
