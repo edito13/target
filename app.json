@@ -19,7 +19,19 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-sqlite"
-    ]
+      "expo-sqlite",
+      "expo-asset"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b3c5646a-4d72-4441-8a31-b1ec31ad9ebb"
+      }
+    },
+    "owner": "edito",
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/b3c5646a-4d72-4441-8a31-b1ec31ad9ebb"
+    }
   }
 }

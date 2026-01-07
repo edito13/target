@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import * as Notifications from "expo-notifications";
+import { Platform } from "react-native";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -17,15 +19,35 @@ interface NotificationProps {
 }
 
 const useNotification = () => {
+  useEffect(() => {
+    const setupAndroidChannel = async () => {
+      if (Platform.OS === "android") {
+        await Notifications.setNotificationChannelAsync("default", {
+          name: "default",
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+        });
+      }
+    };
+
+    setupAndroidChannel();
+  }, []);
+
   const handleNotificate = async ({
     title,
     message,
     delaySeconds = 1,
     repeats = false,
   }: NotificationProps) => {
-    const { status } = await Notifications.requestPermissionsAsync();
+    let status = (await Notifications.getPermissionsAsync()).status;
+
     if (status !== "granted") {
-      alert("Permita notificações");
+      const permission = await Notifications.requestPermissionsAsync();
+      status = permission.status;
+    }
+
+    if (status !== "granted") {
+      alert("Permita notificações nas configurações do app");
       return;
     }
 
@@ -42,6 +64,7 @@ const useNotification = () => {
       },
     });
   };
+
   return { handleNotificate };
 };
 
