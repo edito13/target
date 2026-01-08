@@ -17,7 +17,7 @@
       "icon": "./assets/ios-icon.png"
     },
     "splash": {
-      "image": "./assets/ios-icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
