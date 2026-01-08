@@ -4,8 +4,16 @@
     "slug": "target",
     "scheme": "target",
     "version": "1.0.0",
+    "runtimeVersion": "1.0.0",
+    "owner": "edito",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "android": {
       "package": "com.editochokoso.target",
+      "permissions": ["NOTIFICATIONS"],
       "edgeToEdgeEnabled": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -14,22 +22,29 @@
     },
     "ios": {
       "bundleIdentifier": "com.editochokoso.target",
-      "icon": "./assets/ios-icon.png"
+      "icon": "./assets/ios-icon.png",
+      "supportsTablet": true
     },
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "plugins": ["expo-router", "expo-font", "expo-sqlite", "expo-asset"],
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-sqlite",
+      "expo-asset",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/adaptive-icon.png",
+          "color": "#3D44CD",
+          "sounds": ["default"]
+        }
+      ]
+    ],
     "extra": {
       "router": {},
       "eas": {
         "projectId": "b3c5646a-4d72-4441-8a31-b1ec31ad9ebb"
       }
     },
-    "owner": "edito",
-    "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/b3c5646a-4d72-4441-8a31-b1ec31ad9ebb"
     }

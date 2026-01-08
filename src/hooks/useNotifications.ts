@@ -26,6 +26,7 @@ const useNotification = () => {
           name: "default",
           importance: Notifications.AndroidImportance.MAX,
           vibrationPattern: [0, 250, 250, 250],
+          sound: "default",
         });
       }
     };
@@ -39,7 +40,7 @@ const useNotification = () => {
     delaySeconds = 1,
     repeats = false,
   }: NotificationProps) => {
-    let status = (await Notifications.getPermissionsAsync()).status;
+    let { status } = await Notifications.getPermissionsAsync();
 
     if (status !== "granted") {
       const permission = await Notifications.requestPermissionsAsync();
