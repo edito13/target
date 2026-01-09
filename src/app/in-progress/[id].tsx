@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { Alert, StatusBar, View } from "react-native";
 import React, { useCallback, useState } from "react";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
@@ -10,11 +11,10 @@ import PageHeader from "@/components/PageHeader";
 import Transation, { TransactionI } from "@/components/Transation";
 
 import { TransactionTypes } from "@/types";
+import useNotification from "@/hooks/useNotifications";
 import { NumberToCurrency } from "@/utils/numberToCurrency";
 import useTargetDatabase from "@/database/useTargetDatabase";
 import useTransactionsDatabase from "@/database/useTransactionsDatabase";
-import dayjs from "dayjs";
-import useNotification from "@/hooks/useNotifications";
 
 interface InProgressProps {}
 
@@ -138,7 +138,7 @@ const InProgress: React.FC<InProgressProps> = () => {
         emptyMessage="Nenhuma transação, crie a sua primeira transação e guarde o seu dinheiro."
       />
       <Button
-        title="Nova transação"
+        title={"Nova transação"}
         onPress={() => router.navigate(`/transaction/${params.id}`)}
       />
     </View>
