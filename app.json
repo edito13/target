@@ -5,6 +5,7 @@
     "scheme": "target",
     "version": "1.0.0",
     "runtimeVersion": "1.0.0",
+    "platforms": ["android", "ios"],
     "owner": "edito",
     "splash": {
       "image": "./assets/splash.png",
