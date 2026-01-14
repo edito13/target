@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Alert, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
@@ -12,21 +13,24 @@ import { TransactionTypes } from "@/types";
 import useNotifications from "@/hooks/useNotifications";
 import useTransactionsDatabase from "@/database/useTransactionsDatabase";
 import { NumberToCurrency } from "@/utils/numberToCurrency";
+import useTargetDatabase from "@/database/useTargetDatabase";
 
 interface TransactionProps {}
 
 const Transaction: React.FC<TransactionProps> = () => {
-  const params = useLocalSearchParams<{ id: string }>();
-  const transactionsDatabase = useTransactionsDatabase();
   const { handleNotificate } = useNotifications();
+  const params = useLocalSearchParams<{ id: string }>();
+  const targetDatabase = useTargetDatabase();
+  const transactionsDatabase = useTransactionsDatabase();
 
   const [amount, setAmount] = useState(0);
   const [observation, setObservation] = useState("");
-  const [isCreating, setisCreating] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const [type, setType] = useState<TransactionTypes>(TransactionTypes.Input);
 
   const handleCreate = async () => {
     const payload = { amount, observation, target_id: Number(params.id) };
+    const target = await targetDatabase.show(payload.target_id);
 
     try {
       if (amount <= 0) {
@@ -36,22 +40,54 @@ const Transaction: React.FC<TransactionProps> = () => {
         );
       }
 
-      setisCreating(true);
+      setIsCreating(true);
+      if (type === TransactionTypes.Output && amount > target.current) {
+        return Alert.alert(
+          "Valor insuficiente",
+          "A quantidade desejada é superior a quantidade acumulada até agora.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                setAmount(0), setIsCreating(false);
+              },
+            },
+          ]
+        );
+      }
+
       await transactionsDatabase.create({
         ...payload,
         amount: type === TransactionTypes.Output ? amount * -1 : amount,
       });
-      handleNotificate({
+      // console.log("var1: " + process.env.EXPO_PUBLIC_SENDER_ID);
+      // console.log("var2: " + process.env.EXPO_PUBLIC_KUMBI_SMS_KEY);
+
+      // await axios.post(
+      //   "https://oi.kumbify.com/api/sms/send",
+      //   {
+      //     to: "244941059086",
+      //     body: "Este é o seu código de confirmação: 0006",
+      //     from: process.env.EXPO_PUBLIC_SENDER_ID,
+      //   },
+      //   {
+      //     headers: {
+      //       "kumbi-api-key": "Bearer " + process.env.EXPO_PUBLIC_KUMBI_SMS_KEY,
+      //     },
+      //   }
+      // );
+      await handleNotificate({
         title: "Nova transação",
         message: `Sua transação de ${NumberToCurrency(
           amount
-        )} foi feita com sucesso`,
+        )} foi feita com sucesso.`,
       });
-      setTimeout(() => router.back(), 1000);
+
+      router.back();
     } catch (error) {
       Alert.alert("Erro", "Não foi possível salvar a transação.");
       console.log(error);
-      setisCreating(false);
+      setIsCreating(false);
     }
   };
 

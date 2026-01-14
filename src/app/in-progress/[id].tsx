@@ -29,6 +29,7 @@ const InProgress: React.FC<InProgressProps> = () => {
     target: "R$ 0,00",
     percentage: 0,
   });
+  const [isAchieved, setIsAchieved] = useState(false);
 
   const { handleNotificate } = useNotification();
   const params = useLocalSearchParams<{ id: string }>();
@@ -42,6 +43,8 @@ const InProgress: React.FC<InProgressProps> = () => {
         target: NumberToCurrency(response.amount),
         percentage: response.percentage,
       });
+
+      if (response.percentage >= 100) setIsAchieved(true);
     } catch (error) {
       Alert.alert("Erro", "Não foi possível carregar os detalhes da meta");
       console.log(error);
@@ -94,12 +97,25 @@ const InProgress: React.FC<InProgressProps> = () => {
     try {
       await transactionsDatabase.remove(id);
       fetchData();
-      handleNotificate({
+      await handleNotificate({
         title: "Excluir Transação",
         message: "Transação deletada com sucesso!",
       });
     } catch (error) {
       Alert.alert("Erro", "Não foi possível deletar a transação.");
+      console.log(error);
+    }
+  };
+
+  const handleAchieveTarget = async () => {
+    try {
+      await handleNotificate({
+        title: "Parabéns🎉",
+        message: `Você acabou de concluir a sua meta de ${details.name}.`,
+      });
+      router.back();
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível concluir a meta.");
       console.log(error);
     }
   };
@@ -137,10 +153,14 @@ const InProgress: React.FC<InProgressProps> = () => {
         )}
         emptyMessage="Nenhuma transação, crie a sua primeira transação e guarde o seu dinheiro."
       />
-      <Button
-        title={"Nova transação"}
-        onPress={() => router.navigate(`/transaction/${params.id}`)}
-      />
+      {isAchieved ? (
+        <Button title="Concluir Meta" onPress={handleAchieveTarget} />
+      ) : (
+        <Button
+          title="Nova transação"
+          onPress={() => router.navigate(`/transaction/${params.id}`)}
+        />
+      )}
     </View>
   );
 };

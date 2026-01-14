@@ -43,12 +43,12 @@ const Target: React.FC<TargetProps> = () => {
     const payload = { name, amount };
     try {
       await targetDatabase.create(payload);
-      handleNotificate({
+      await handleNotificate({
         title: "Nova meta",
         message: "Meta criada com sucesso!",
       });
 
-      setTimeout(() => router.back(), 1000);
+      router.back();
     } catch (error) {
       Alert.alert("Erro", "Não foi possível criar a meta.");
       console.log(error);
@@ -73,12 +73,12 @@ const Target: React.FC<TargetProps> = () => {
       setIsProcessing(true);
       await targetDatabase.update(payload);
 
-      handleNotificate({
+      await handleNotificate({
         title: "Atualização da Meta",
         message: "Meta atualizada com sucesso!",
       });
 
-      setTimeout(() => router.back(), 1000);
+      router.back();
     } catch (error) {
       Alert.alert("Erro", "Não foi possível editar a meta.");
       console.log(error);
@@ -102,12 +102,12 @@ const Target: React.FC<TargetProps> = () => {
     try {
       setIsProcessing(true);
       await targetDatabase.remove(id);
-      handleNotificate({
+      await handleNotificate({
         title: "Exluir Meta",
         message: "Meta deletada com sucesso!",
       });
 
-      setTimeout(() => router.replace("/"), 1000);
+      router.replace("/");
     } catch (error) {
       Alert.alert("Erro", "Não foi possível deletar a meta.");
       console.log(error);
