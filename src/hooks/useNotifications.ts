@@ -37,7 +37,7 @@ const useNotification = () => {
   const handleNotificate = async ({
     title,
     message,
-    delaySeconds = 1,
+    delaySeconds = 0,
     repeats = false,
   }: NotificationProps) => {
     let { status } = await Notifications.getPermissionsAsync();
@@ -52,15 +52,29 @@ const useNotification = () => {
       return;
     }
 
+    // ✅ NOTIFICAÇÃO IMEDIATA
+    if (delaySeconds <= 0) {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title,
+          body: message,
+          sound: "default",
+        },
+        trigger: null, // ✅ ESSENCIAL NO iOS
+      });
+      return;
+    }
+
+    // ✅ NOTIFICAÇÃO AGENDADA
     await Notifications.scheduleNotificationAsync({
       content: {
         title,
         body: message,
-        sound: true,
+        sound: "default",
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-        seconds: delaySeconds,
+        seconds: Math.max(delaySeconds, repeats ? 60 : 1),
         repeats,
       },
     });
