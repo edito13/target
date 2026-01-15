@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
-import { Alert, StatusBar, View } from "react-native";
 import React, { useCallback, useState } from "react";
+import { Alert, StatusBar, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 
 import List from "@/components/List";
@@ -109,6 +110,15 @@ const InProgress: React.FC<InProgressProps> = () => {
 
   const handleAchieveTarget = async () => {
     try {
+      const stored = await AsyncStorage.getItem("achievedTargets");
+      const items: string[] = stored ? JSON.parse(stored) : [];
+      const id = params.id;
+
+      if (!items.includes(id)) {
+        items.push(id);
+      }
+
+      await AsyncStorage.setItem("achievedTargets", JSON.stringify(items));
       await handleNotificate({
         title: "Parabéns🎉",
         message: `Você acabou de concluir a sua meta de ${details.name}.`,

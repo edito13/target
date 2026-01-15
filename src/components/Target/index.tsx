@@ -8,6 +8,7 @@ import {
 import { styles } from "./styles";
 import Separator from "../Separator";
 import { MaterialIcons } from "@expo/vector-icons";
+import { colors } from "@/theme";
 
 export interface TargetI {
   id?: string;
@@ -19,9 +20,14 @@ export interface TargetI {
 
 interface TargetProps extends TouchableOpacityProps {
   data: TargetI;
+  isAchieved?: boolean;
 }
 
-const Target: React.FC<TargetProps> = ({ data, ...rest }) => {
+const Target: React.FC<TargetProps> = ({
+  data,
+  isAchieved = false,
+  ...rest
+}) => {
   return (
     <TouchableOpacity style={styles.container} {...rest}>
       <View style={styles.content}>
@@ -32,7 +38,11 @@ const Target: React.FC<TargetProps> = ({ data, ...rest }) => {
           {data.percentage} • {data.current} de {data.target}
         </Text>
       </View>
-      <MaterialIcons name="chevron-right" size={20} />
+      {isAchieved ? (
+        <Text style={{ color: colors.blue["500"] }}>Concluída</Text>
+      ) : (
+        <MaterialIcons name="chevron-right" size={20} />
+      )}
     </TouchableOpacity>
   );
 };

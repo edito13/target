@@ -11,9 +11,9 @@ import TransactionType from "@/components/TransactionType";
 
 import { TransactionTypes } from "@/types";
 import useNotifications from "@/hooks/useNotifications";
-import useTransactionsDatabase from "@/database/useTransactionsDatabase";
 import { NumberToCurrency } from "@/utils/numberToCurrency";
 import useTargetDatabase from "@/database/useTargetDatabase";
+import useTransactionsDatabase from "@/database/useTransactionsDatabase";
 
 interface TransactionProps {}
 
@@ -50,6 +50,24 @@ const Transaction: React.FC<TransactionProps> = () => {
               text: "OK",
               onPress: () => {
                 setAmount(0), setIsCreating(false);
+              },
+            },
+          ]
+        );
+      }
+
+      if (
+        type === TransactionTypes.Input &&
+        amount > target.amount - target.current
+      ) {
+        return Alert.alert(
+          "Valor ultrapassado",
+          "A quantidade inserida é superior a quantidade necessária para atingir a meta, use a diferença restante.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                setAmount(target.amount - target.current), setIsCreating(false);
               },
             },
           ]
